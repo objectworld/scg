@@ -2015,6 +2015,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
 ------
 ### 4.7.3. The `LoadBalancerClient` Filter
 `LoadBalancerClientFilter`는 `ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR`이란 exchange 속성에서 URI를 찾는다. URL에 `lb` 스키마가 있으면 (ex. `lb://myservice`) 스프링 클라우드 `LoadBalancerClient`를 사용해서 이름을 (이 예시에선 `myservice`) 실제 호스트와 포트로 리졸브하고, 같은 속성에 URI를 대체해 넣는다. 원래 있던 URL은 `ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR` 속성에 있는 리스트에 추가한다. 이 필터는 `ServerWebExchangeUtils.GATEWAY_SCHEME_PREFIX_ATTR` 속성값도 `lb`와 같은지 확인한다. 속성 값이 `lb`라면 같은 규칙을 적용한다. 다음은 `LoadBalancerClientFilter` 설정 예시다:
+
 **Example 56. application.yml**
 
 ```
@@ -2037,6 +2038,7 @@ spring:
 ------
 ### 4.7.4. The `ReactiveLoadBalancerClientFilter`
 `ReactiveLoadBalancerClientFilter`는 `ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR`이란 exchange 속성에서 URI를 찾는다. URL에 `lb` 스키마가 있으면 (ex. `lb://myservice`) 스프링 클라우드 `ReactorLoadBalancer`를 사용해서 이름을 (이 예시에선 `myservice`) 실제 호스트와 포트로 리졸브하고, 같은 속성에 URI를 대체해 넣는다. 원래 있던 URL은 `ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR` 속성에 있는 리스트에 추가한다. 이 필터는 `ServerWebExchangeUtils.GATEWAY_SCHEME_PREFIX_ATTR` 속성값도 `lb`와 같은지 확인한다. 속성 값이 `lb`라면 같은 규칙을 적용한다. 다음은 `ReactiveLoadBalancerClientFilter` 설정 예시다:
+
 **Example 57. application.yml**
 
 ```
@@ -2075,6 +2077,7 @@ exchage의 `ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR` 속성에 있는 UR
 URI에 `lb:ws://serviceid`같은 `lb` 프리픽스를 지정하면 웹소켓 요청을 로드밸런싱할 수 있다.
 > [SockJS](https://github.com/sockjs)를 일반 HTTP에 대한 폴백으로 사용한다면 웹소켓 route 외에 일반 HTTP route도 설정해야 한다.
 다음은 웹소켓 라우팅 필터 설정 예시다:
+
 **Example 58. application.yml**
 
 ```
@@ -2197,6 +2200,7 @@ spring:
 ------
 ### 4.9.1. TLS Handshake
 게이트웨이는 백엔드로 라우팅하는 데 사용하는 클라이언트 풀을 유지한다. HTTPS를 통해 통신할 때는 클라이언트에서 TLS 핸드셰이크를 시작한다. 이 핸드셰이크에는 관련된 timeout 값들이 많이 있다. 이런 timeout 값들은 아래와 같이 설정할 수 있다 (기본값을 표기했다).
+
 **Example 62. application.yml**
 
 ```
@@ -2246,6 +2250,7 @@ spring:
 
 ## 4.11. Route Metadata Configuration
 모든 route에는 다음과 같이 메타데이터를 통해 별도의 파라미터를 설정할 수 있다:
+
 **Example 65. application.yml**
 
 ```
@@ -2336,6 +2341,7 @@ import static org.springframework.cloud.gateway.support.RouteMetadataUtils.RESPO
 ------
 ### 4.12.3. Fluent Java Routes API
 `RouteLocatorBuilder` 빈은 자바 설정을 간소화할 수 있는 fluent API를 제공한다. 다음은 사용 방법을 보여주는 예시다:
+
 **Example 66. GatewaySampleApplication.java**
 
 ```
@@ -2375,6 +2381,7 @@ public RouteLocator customRouteLocator(RouteLocatorBuilder builder, ThrottleGate
 디폴트 predicate는 `/serviceId/**` 패턴으로 정의한 path predicate며, 여기서 `serviceId`는 `DiscoveryClient`의 서비스 ID다.
 디폴트 필터는 regexp `/serviceId/?(?<remaining>.*)`와 replacement `/${remaining}`을 가진 rewrite path 필터다. 이렇게 하면 요청을 다운스트림으로 전송하기 전에 서비스 ID는 path에서 제거된다.
 `DiscoveryClient` route에서 사용할 predicate나 필터를 커스텀하고 싶다면, `spring.cloud.gateway.discovery.locator.predicates[x]`와 `spring.cloud.gateway.discovery.locator.filters[y]`를 설정해라. 단, 앞에서 보여준 디폴트 predicate와 필터 기능을 보존하고 싶다면, 디폴트 predicate, 필터도 반드시 추가해야 한다. 다음은 어떻게 설정을 구성하는지 보여주는 예시다:
+
 **Example 67. application.properties**
 
 ```
@@ -2394,6 +2401,7 @@ spring.cloud.gateway.discovery.locator.filters[1].args[replacement]: "'/${remain
 리액터 네티 액세스 로그를 활성화하려면 `-Dreactor.netty.http.server.accessLogEnabled=true`를 설정해라.
 > 스프링 부트 프로퍼티가 아닌 자바 시스템 프로퍼티를 설정해야 한다.
 로깅 시스템에서 액세스 로그 파일을 별도로 만들게 설정할 수도 있다. 다음은 Logback 설정 예시다:
+
 **Example 68. logback.xml**
 
 ```
@@ -2415,6 +2423,7 @@ spring.cloud.gateway.discovery.locator.filters[1].args[replacement]: "'/${remain
 ## 4.14. CORS Configuration
 
 설정만 넣어주면 게이트웨이에서 CORS 동작을 제어할 수 있다. “글로벌” CORS 설정은 URL 패턴을 [스프링 프레임워크 `CorsConfiguration`](https://docs.spring.io/spring/docs/5.0.x/javadoc-api/org/springframework/web/cors/CorsConfiguration.html)로 매핑한 맵으로 표현한다. 다음은 CORS를 설정하는 예시다:
+
 **Example 69. application.yml**
 
 ```
@@ -2435,6 +2444,7 @@ spring:
 ## 4.15. Actuator API
 
 액추에이터 엔드포인트 `/gateway`를 사용하면 스프링 클라우드 게이트웨이 어플리케이션을 모니터링하고, 어플리케이션과 상호 작용할 수 있다. 원격으로 접근하려면 어플리케이션 프로퍼티에 엔드포인트를 [활성화](https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html#production-ready-endpoints-enabling-endpoints)하고 [HTTP나 JMX를 통해 노출해야](https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html#production-ready-endpoints-exposing-endpoints) 한다. 다음은 설정 방법을 보여주는 예시다:
+
 **Example 70. application.properties**
 
 ```
@@ -2463,6 +2473,7 @@ management.endpoints.web.exposure.include=gateway
 ```
 
 이 기능은 디폴트로 활성화된다. 비활성화하려면 다음 프로퍼티를 설정해라:
+
 **Example 71. application.properties**
 
 ```
