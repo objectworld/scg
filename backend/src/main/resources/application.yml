@@ -1,0 +1,8 @@
+server:
+  port: 8081 #복사한 서비스는 8082로 변경
+
+spring:
+  application:
+    name: backend
+  profiles:
+    active: local

@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: demo-gateway
+  profiles:
+    active: local
+  redis:
+    host: localhost
+    port: 6379    
+
+resilience4j.circuitbreaker:
+  configs:
+    default: #https://resilience4j.readme.io/docs/circuitbreaker 참고
+             #최소 10건이 요청되었을 때 60% 이상(6건)의 요청이 오류가 발생하거나, 느린 요청일 경우 CircuitBreaker가 발동.
+        registerHealthIndicator: true
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10 # {통계건수}
+        minimumNumberOfCalls: 10 # {최소요청횟수}
+        failureRateThreshold: 60 # {실패율}
+        slowCallRateThreshold: 60 # {느린요청비율}
+        slowCallDurationThreshold: 3000 # {느린요청으로 간주할 시간}
+        permittedNumberOfCallsInHalfOpenState: 2
+        waitDurationInOpenState: 5s # {Circuit Breaker유지시간}
+        eventConsumerBufferSize: 10
+  instances:
+    testcirguitbreaker:
+        baseConfig: default
+    
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+    redis:
+      enabled: true
+        
+logging: 
+  level:
+    org.springframework.cloud.gateway: TRACE
